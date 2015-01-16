@@ -1,4 +1,4 @@
-package WebService::DPD::API;
+package WebService::GeoPost::Shipping::API;
 use strict;
 use warnings;
 use Carp;
@@ -11,28 +11,28 @@ use JSON;
 use MIME::Base64;
 use namespace::clean;
 
-# ABSTRACT: communicates with DPD API
+# ABSTRACT: communicates with GeoPost API
 
-our $VERSION = 'v0.0003';
+our $VERSION = 'v0.0004';
 
  
 =head1 NAME
 
-WebService::DPD::API
+WebService::GeoPost::Shipping::API
 
 =head1 SYNOPSIS
 
 
-    $dpd = WebService::DPD::API->new(
-                                        username => $username,
-                                        password => $password,
-                                        geoClient => "account/$customer_id",
-                                        );
+    $geopost = WebService::GeoPost::Shipping::API->new(
+                                                   username => $username,
+                                                   password => $password,
+                                                   geoClient => "account/$customer_id",
+                                                   );
 =cut
 
 =head1 DESCRIPTION
 
-This module provides a simple wrapper around DPD delivery service API. This is a work in progress and contains incomplete test code, methods are likely to be refactored, you have been warned.
+This module provides a simple wrapper around GeoPost delivery service API. This is a work in progress and contains incomplete test code, methods are likely to be refactored, you have been warned.
 
 
 =head1 METHODS
@@ -90,7 +90,7 @@ sub BUILD
 {
 	my $self = shift;
 	$self->ua( LWP::UserAgent->new );
-	$self->ua->agent("Perl_WebService::DPD::API/$VERSION");
+	$self->ua->agent("Perl_WebService::GeoPost::Shipping::API/$VERSION");
 	$self->ua->cookie_jar({});
 }
 
@@ -101,7 +101,7 @@ sub BUILD
 
 Authenticates and establishes api session used by following methods
 
-	$dpd->login;
+	$geopost->login;
 
 =cut
 sub login
@@ -122,7 +122,7 @@ sub login
 
 Retrieves the country details for a provided country code and can be used to determine if a country requires a postcode or if liability is allowed etc.
 
-	$country = $dpd->get_country( 'GB' );
+	$country = $geopost->get_country( 'GB' );
 	
 =cut
 sub get_country
@@ -162,7 +162,7 @@ Retrieves list of services available for provided shipping information.
                         shipmentType        => 0, # 1 or 2 if a collection on delivery or swap it service is required 
                         };
 
-    my $services = $dpd->get_services( $shipping );
+    my $services = $geopost->get_services( $shipping );
 
 
 =cut
@@ -179,7 +179,7 @@ sub get_services
 
 Retrieves the supported countries for a geoServiceCode
 
-	$service = $dpd->get_service(812);
+	$service = $geopost->get_service(812);
 
 =cut
 sub get_service
@@ -249,7 +249,7 @@ Creates a shipment object
 						};
 
 
-	$shipment = $dpd->create_shipment( $shipment_data_example );
+	$shipment = $geopost->create_shipment( $shipment_data_example );
 
 =cut
 sub create_shipment
@@ -267,7 +267,7 @@ sub create_shipment
 
 Provides a full list of available shipping countries
 
-	$countries = $dpd->list_countries;
+	$countries = $geopost->list_countries;
 
 =cut
 
@@ -283,7 +283,7 @@ sub list_countries
 
 Get label for given shipment id, available in multiple formats
 
-	$label = $dpd->get_labels( $shipment_id, 'application/pdf' );
+	$label = $geopost->get_labels( $shipment_id, 'application/pdf' );
 
 =cut
 sub get_labels
@@ -303,7 +303,7 @@ sub get_labels
 
 =head1 FUTURE METHODS
 
-These methods are implemented as documented in the DPD API specification.  Although at the time of writing their functionality has not been publicly implemented within the API.
+These methods are implemented as documented in the GeoPost API specification.  Although at the time of writing their functionality has not been publicly implemented within the API.
 
 =cut 
 
@@ -312,7 +312,7 @@ These methods are implemented as documented in the DPD API specification.  Altho
 
 Get a job id to group shipments
 
-	$job_id = $dpd->request_jobid;
+	$job_id = $geopost->request_jobid;
 
 =cut 
 sub request_jobid
@@ -331,7 +331,7 @@ sub request_jobid
 
 Retrieves all labels for a given job id
 
-	$labels = $dpd->get_labels_for_job( $id, $format );
+	$labels = $geopost->get_labels_for_job( $id, $format );
 
 =cut
 sub get_labels_for_job
@@ -375,7 +375,7 @@ sub get_shipments
 
 Retrieves all shipment information associated with a shipment id
 
-	$shipment = $dpd->get_shipment( $id );
+	$shipment = $geopost->get_shipment( $id );
 
 =cut
 sub get_shipment
@@ -391,7 +391,7 @@ sub get_shipment
 
 Creates and returns an international invoice associated with the given shipment id.
 
-	$invoice = $dpd->get_international_invoice( $shipment_id );
+	$invoice = $geopost->get_international_invoice( $shipment_id );
 
 =cut
 sub get_international_invoice
@@ -411,7 +411,7 @@ sub get_international_invoice
 
 Retrieves all labels that have not already been printed for a particular collection date.
 
-	$labels = $dpd->get_unprinted_labels( $date, $format );
+	$labels = $geopost->get_unprinted_labels( $date, $format );
 
 =cut
 sub get_unprinted_labels
@@ -430,7 +430,7 @@ sub get_unprinted_labels
 
 	Delete a shipment
 
-	$dpd->delete_shipment( $id );
+	$geopost->delete_shipment( $id );
 
 =cut
 sub delete_shipment
@@ -447,7 +447,7 @@ sub delete_shipment
 
 Update collection date for a shipment
 
-	$dpd->change_collection_date( $id, $date );
+	$geopost->change_collection_date( $id, $date );
 
 =cut
 sub change_collection_date
@@ -468,7 +468,7 @@ sub change_collection_date
 
 Update status of shipment to void.
 
-	$dpd->void_shipment( $id );
+	$geopost->void_shipment( $id );
 
 =cut 
 sub void_shipment
@@ -488,7 +488,7 @@ sub void_shipment
 
 Tag all non manifested shipments for a collection date with a new generated manifest id.
 
-	$manifest = $dpd->create_manifest( $date );
+	$manifest = $geopost->create_manifest( $date );
 
 =cut
 sub create_manifest
@@ -508,7 +508,7 @@ sub create_manifest
 
 Retrieves all the manifests and the core manifest information for a particular collection date.
 	
-	$manifests = $dpd->get_manifest_by_date( $date );
+	$manifests = $geopost->get_manifest_by_date( $date );
 
 =cut
 sub get_manifest_by_date
@@ -581,7 +581,7 @@ sub _to_query_params
 
 Constructs and sends authenticated HTTP API request
 
-    $result = $dpd->send_request( {
+    $result = $geopost->send_request( {
                                     type    => 'POST',                    # HTTP request type defaults to GET
                                     path    => "/path/to/service",        # Path to service
                                     data    => {                          # hashref of data for POST/PUT requests, converted to JSON for sending 
@@ -665,7 +665,7 @@ sub send_request
 
 =head1 SOURCE CODE
 
-The source code for this module is held in a public git repository on Github : https://github.com/pryanet/WebService-DPD-API
+The source code for this module is held in a public git repository on Github : https://github.com/pryanet/WebService-GeoPost-Shipping-API
 
 =head1 LICENSE AND COPYRIGHT
  

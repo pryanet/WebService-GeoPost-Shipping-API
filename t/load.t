@@ -5,7 +5,7 @@ use warnings;
 use Test::More tests => 15;
 
 use lib 'lib';
-use WebService::DPD::API;
+use WebService::GeoPost::Shipping::API;
 use Data::Dumper;
 
 my $username = 'TESTAPI';
@@ -18,12 +18,12 @@ $year +=1900;
 $mon +=1;
 my $date = sprintf ("%04d-%02d-%02dT23:59:59", $year,$mon,$mday);
 
-my $api = WebService::DPD::API->new( 
-									username => $username,
-									password => $password,
-									);
+my $api = WebService::GeoPost::Shipping::API->new( 
+													username => $username,
+													password => $password,
+													);
 
-ok( $WebService::DPD::API::VERSION, 'Loading WebService::DPD::API' );
+ok( $WebService::GeoPost::Shipping::API::VERSION, 'Loading WebService::GeoPost::Shipping::API' );
 ok( defined($api), 'Object creation' );
 ok( $username eq $api->username, 'Username' ) or diag($api->errstr);
 ok( $password eq $api->password, 'Password' ) or diag($api->errstr);
@@ -136,7 +136,7 @@ ok( $label, 'get_labels' ) or diag($api->errstr);
 
 
 SKIP: {
-	skip "Documented by DPD but not live yet", 1 unless $ENV{RUN_SKIPPED};
+	skip "Documented by GeoPost but not live yet", 1 unless $ENV{RUN_SKIPPED};
 
 	my $shipment_details = $api->get_shipment( $shipment->{shipmentId} );
 	ok( $shipment_details, 'get_shipment' ) or diag($api->errstr);
