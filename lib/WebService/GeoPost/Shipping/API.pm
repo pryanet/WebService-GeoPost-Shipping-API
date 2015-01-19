@@ -13,7 +13,7 @@ use namespace::clean;
 
 # ABSTRACT: communicates with GeoPost API
 
-our $VERSION = 'v0.0004';
+our $VERSION = 'v0.0005';
 
  
 =head1 NAME
@@ -51,7 +51,7 @@ has password => (
 );
 
 has url => ( is => 'ro',
-			 default => 'https://api.dpd.co.uk'
+			 default => sub {'https://api.dpd.co.uk'}
 			);
 
 has host => ( is => 'ro',
@@ -73,7 +73,7 @@ has geoSession => (
 
 has geoClient => (
 	is => 'ro',
-	default => 'thirdparty/pryanet',
+	default => sub {'thirdparty/pryanet'},
 );
 
 has debug => (
@@ -83,7 +83,7 @@ has debug => (
 
 has errstr => (
 	is => 'rw',
-	default => '',
+	default => sub {''},
 );
 
 sub BUILD 
